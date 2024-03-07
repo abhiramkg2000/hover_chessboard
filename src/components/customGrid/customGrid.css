@@ -1,0 +1,25 @@
+.grid_container {
+  border-top: 2px solid #1976d2;
+  border-left: 2px solid #1976d2;
+}
+
+.button_group {
+  display: flex;
+  justify-content: center;
+}
+
+.slider_group {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0 20px 0;
+}
+
+.meta_data_group {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* .grid{
+  min-height: 600px;
+} */

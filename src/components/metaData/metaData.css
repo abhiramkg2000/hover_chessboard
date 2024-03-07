@@ -1,0 +1,15 @@
+.start_end_metadata,
+.path_metadata {
+  margin: 0 20px;
+}
+
+.start_end_boxes {
+  height: 30px;
+  width: 30px;
+  background-color: #1976d2;
+}
+.path_boxes {
+  height: 30px;
+  width: 30px;
+  background-color: #e2e2e2;
+}
