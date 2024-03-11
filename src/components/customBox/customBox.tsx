@@ -151,7 +151,7 @@ const CustomBox = ({
         backgroundColor: item.color,
         color: boxTextColor,
         width: `${boxWidth * 100}px`,
-        height: `${boxHeight * 500}px`,
+        height: `${boxHeight * 400}px`,
       }}
       onClick={handleClick}
     >

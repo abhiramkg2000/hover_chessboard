@@ -5,9 +5,10 @@
 }
 
 .app {
+  user-select: none;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  user-select: none;
+  padding: 20px 30px;
 }
