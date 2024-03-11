@@ -1,1 +1,1 @@
-This repository contains a Maze App made with React+Typescript.
+This repository contains a Path Finder App made with React+Typescript.
