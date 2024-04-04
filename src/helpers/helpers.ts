@@ -17,7 +17,7 @@ export const createGrid = (gridSize: number): BoxItemType[][] => {
 };
 
 export const findPath = (
-  selectedArray: BoxItemType[][],
+  gridBoxes: BoxItemType[][],
   selectedBox: BoxItemType
 ) => {
   let path1: BoxItemType[] = [];
@@ -35,7 +35,7 @@ export const findPath = (
       while (r - 1 >= 0 && c - 1 >= 0) {
         r = r - 1;
         c = c - 1;
-        path1.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+        path1.push({ ...gridBoxes[r][c], color: PATH_BOX_COLOR });
       }
     }
     // antidiagonal (selectedBox to top right)
@@ -43,7 +43,7 @@ export const findPath = (
       while (r - 1 >= 0 && c + 1 <= 7) {
         r = r - 1;
         c = c + 1;
-        path2.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+        path2.push({ ...gridBoxes[r][c], color: PATH_BOX_COLOR });
       }
     }
     // main diagonal(selectedBox to bottom right)
@@ -51,7 +51,7 @@ export const findPath = (
       while (r + 1 <= 7 && c + 1 <= 7) {
         r = r + 1;
         c = c + 1;
-        path3.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+        path3.push({ ...gridBoxes[r][c], color: PATH_BOX_COLOR });
       }
     }
     // antidiagonal(selectedBox to bottom left)
@@ -59,7 +59,7 @@ export const findPath = (
       while (r + 1 <= 7 && c - 1 >= 0) {
         r = r + 1;
         c = c - 1;
-        path4.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+        path4.push({ ...gridBoxes[r][c], color: PATH_BOX_COLOR });
       }
     }
   }
