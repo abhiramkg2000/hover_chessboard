@@ -8,56 +8,97 @@ import {
   PATH_BOX_COLOR,
   WHITE,
   BLACK,
+  DEFAULT_GRID_SIZE,
 } from "../../constants/constants";
 import { BoxItemType } from "../../types/types";
+
+import { findPath } from "../../helpers/helpers";
 
 import "./customBox.css";
 
 type CustomBoxProps = {
   index: number;
   item: BoxItemType;
+  gridBoxes: BoxItemType[][];
   setGridBoxes: React.Dispatch<React.SetStateAction<BoxItemType[][]>>;
-  gridSize: number;
-  selectedBoxes: BoxItemType[];
-  setSelectedBoxes: React.Dispatch<React.SetStateAction<BoxItemType[]>>;
+  selectedBox: BoxItemType;
+  setSelectedBox: React.Dispatch<React.SetStateAction<BoxItemType>>;
   pathArray: BoxItemType[];
+  setPathArray: React.Dispatch<React.SetStateAction<BoxItemType[]>>;
 };
 
 const CustomBox = ({
   index,
   item,
+  gridBoxes,
   setGridBoxes,
-  gridSize,
-  selectedBoxes,
-  setSelectedBoxes,
+  selectedBox,
+  setSelectedBox,
   pathArray,
+  setPathArray,
 }: CustomBoxProps) => {
   const boxTextColor = item.color === SELECTED_BOX_COLOR ? WHITE : BLACK;
-  const boxWidth = 1 / gridSize;
-  const boxHeight = 1 / gridSize;
-  const handleClick = () => {
-    // let selectedBoxes: BoxItemType[] = [];
-    // selected.forEach((row) => {
-    //   row.forEach((item) => {
-    //     if (item.clicked) {
-    //       selectedBoxes = [...selectedBoxes, item];
-    //     }
-    //   });
-    // });
-    const isBoxSelected = selectedBoxes.some(
+  const boxWidth = 1 / DEFAULT_GRID_SIZE;
+  const boxHeight = 1 / DEFAULT_GRID_SIZE;
+
+  const handleMouseEnter = () => {
+    // console.log(" enter ", item.i, item.j);
+    setGridBoxes((prev) => {
+      const formattedArray = prev.map((row, i) => {
+        return row.map((item, j) => {
+          if (parseInt(i + "" + j) === index) {
+            return {
+              ...item,
+              color: SELECTED_BOX_COLOR,
+            };
+          }
+          return item;
+        });
+      });
+      return formattedArray;
+    });
+    setSelectedBox({
+      ...item,
+      color: SELECTED_BOX_COLOR,
+    });
+    setPathArray(
+      findPath(gridBoxes, {
+        ...item,
+        color: SELECTED_BOX_COLOR,
+      })
+    );
+  };
+
+  const handleMouseLeave = () => {
+    // console.log(" leave ", item.i, item.j);
+    setGridBoxes((prev) => {
+      const formattedArray = prev.map((row) => {
+        return row.map((item) => {
+          return {
+            ...item,
+            color: DEFAULT_BOX_COLOR,
+          };
+        });
+      });
+      return formattedArray;
+    });
+    setSelectedBox({} as BoxItemType);
+    setPathArray([]);
+  };
+
+  useEffect(() => {
+    const isBoxSelected = pathArray.some(
       (box) => parseInt(box.i + "" + box.j) === index
     );
 
-    if (selectedBoxes.length < 2 && !isBoxSelected) {
-      // console.log("if working");
+    if (isBoxSelected) {
       setGridBoxes((prev) => {
         const formattedArray = prev.map((row, i) => {
           return row.map((item, j) => {
             if (parseInt(i + "" + j) === index) {
               return {
                 ...item,
-                clicked: !item.clicked,
-                color: SELECTED_BOX_COLOR,
+                color: PATH_BOX_COLOR,
               };
             }
             return item;
@@ -65,82 +106,8 @@ const CustomBox = ({
         });
         return formattedArray;
       });
-      setSelectedBoxes((prev) => {
-        // console.log("prev1", prev, item);
-        return [
-          ...prev,
-          {
-            ...item,
-            clicked: !item.clicked,
-            color: SELECTED_BOX_COLOR,
-          },
-        ];
-      });
-    } else {
-      // console.log(
-      //   "else working",
-      //   selectedBoxes.filter((box) => parseInt(box.i + "" + box.j) === index)
-      // );
-      if (isBoxSelected) {
-        setGridBoxes((prev) => {
-          const formattedArray = prev.map((row, i) => {
-            return row.map((item, j) => {
-              if (parseInt(i + "" + j) === index) {
-                return {
-                  ...item,
-                  clicked: !item.clicked,
-                  color: DEFAULT_BOX_COLOR,
-                };
-              }
-              return item;
-            });
-          });
-          return formattedArray;
-        });
-        setSelectedBoxes((prev) => {
-          // console.log(
-          //   "prev2",
-          //   prev.filter((box) => parseInt(box.i + "" + box.j) !== index)
-          // );
-          return prev.filter((box) => parseInt(box.i + "" + box.j) !== index);
-        });
-      }
     }
-  };
-
-  useEffect(() => {
-    // console.log(index);
-
-    //to check if the box is present in the pathArray
-    const isBoxSelected = pathArray
-      .slice(1, -1)
-      .some((box) => parseInt(box.i + "" + box.j) === index);
-
-    let timeoutId = 0;
-
-    if (isBoxSelected) {
-      timeoutId = setTimeout(() => {
-        // Change the background color after the specified delay
-        setGridBoxes((prev) => {
-          const formattedArray = prev.map((row, i) => {
-            return row.map((item, j) => {
-              if (parseInt(i + "" + j) === index) {
-                return {
-                  ...item,
-                  color: PATH_BOX_COLOR, // Change to the desired color
-                };
-              }
-              return item;
-            });
-          });
-          return formattedArray;
-        });
-      }, pathArray.findIndex((item) => parseInt(item.i + "" + item.j) === index) * 500); // Set the delay in milliseconds (e.g., 2000ms for 2 seconds)
-
-      // Cleanup the timeout to avoid memory leaks
-      return () => clearTimeout(timeoutId);
-    }
-  }, [index, pathArray, setGridBoxes]);
+  }, [index, setGridBoxes, selectedBox]);
 
   return (
     <Grid
@@ -153,9 +120,12 @@ const CustomBox = ({
         width: `${boxWidth * 100}px`,
         height: `${boxHeight * 400}px`,
       }}
-      onClick={handleClick}
     >
-      <Box className="box">
+      <Box
+        className="box"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {item.i}
         {item.j}
       </Box>

@@ -1,6 +1,4 @@
-export const GRID_ROWS = 9;
-export const GRID_COLUMNS = 9;
-export const DEFAULT_GRID_SIZE = 5;
+export const DEFAULT_GRID_SIZE = 8;
 //Colors
 export const SELECTED_BOX_COLOR = "#1976d2";
 export const PATH_BOX_COLOR = "#e2e2e2";

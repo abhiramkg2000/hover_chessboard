@@ -1,8 +1,4 @@
-import {
-  SELECTED_BOX_COLOR,
-  PATH_BOX_COLOR,
-  DEFAULT_BOX_COLOR,
-} from "../constants/constants";
+import { PATH_BOX_COLOR, DEFAULT_BOX_COLOR } from "../constants/constants";
 import { BoxItemType } from "../types/types";
 
 export const createGrid = (gridSize: number): BoxItemType[][] => {
@@ -13,7 +9,6 @@ export const createGrid = (gridSize: number): BoxItemType[][] => {
       gridArray[i][j] = {
         i: i,
         j: j,
-        clicked: false,
         color: DEFAULT_BOX_COLOR,
       };
     }
@@ -23,172 +18,50 @@ export const createGrid = (gridSize: number): BoxItemType[][] => {
 
 export const findPath = (
   selectedArray: BoxItemType[][],
-  seletedBoxes: BoxItemType[]
+  selectedBox: BoxItemType
 ) => {
-  // console.log(...seletedBoxes);
-  if (seletedBoxes.length === 2) {
-    let path: BoxItemType[] = [];
-    const startingRow = seletedBoxes[0].i;
-    const startingColumn = seletedBoxes[0].j;
-    const endingRow = seletedBoxes[1].i;
-    const endingColumn = seletedBoxes[1].j;
-    let r = startingRow;
-    let c = startingColumn;
-    path.push(selectedArray[startingRow][startingColumn]);
-    // console.log(startingRow, startingColumn, endingRow, endingColumn);
-    // selectedArray.forEach((row, i) => {
-    // row.forEach((_, j) => {
-    // //startingRow < endingRow
-    // if (startingRow < endingRow && startingColumn < endingColumn) {
-    //   const item = selectedArray[i + 1][j + 1];
-    //   console.log(item);
-    //   path.push(item);
-    // } else if (startingRow < endingRow && startingColumn === endingColumn) {
-    //   path.push(selectedArray[i + 1][j]);
-    // } else if (startingRow === endingRow && startingColumn < endingColumn) {
-    //   path.push(selectedArray[i][j + 1]);
-    // }
-    // //startingRow > endingRow
-    // else if (startingRow > endingRow && startingColumn > endingColumn) {
-    //   path.push(selectedArray[i - 1][j - 1]);
-    // } else if (startingRow > endingRow && startingColumn === endingColumn) {
-    //   path.push(selectedArray[i - 1][j]);
-    // } else if (startingRow === endingRow && startingColumn > endingColumn) {
-    //   path.push(selectedArray[i][j - 1]);
-    // }
-    //startingRow < endingRow
-    // if (
-    //   i >= startingRow &&
-    //   i <= endingRow &&
-    //   j >= startingColumn &&
-    //   j <= endingColumn
-    // ) {
-    //   // //startingRow
-    //   // if (i === startingRow && j === startingColumn) {
-    //   //   console.log("8", i, j);
-    //   //   path.push(selectedArray[i][j]);
-    //   // }
-    //   if (i + 1 <= endingRow && j + 1 <= endingColumn) {
-    //     console.log("1", i, j);
-    //     path.push(selectedArray[i + 1][j + 1]);
-    //     (r = i + 1), (c = j + 1);
-    //   } else if (i + 1 < endingRow && j === endingColumn) {
-    //     console.log("2", i, j);
-    //     path.push(selectedArray[i + 1][j]);
-    //     (r = i + 1), (c = j);
-    //   } else if (i === endingRow && j + 1 < endingColumn) {
-    //     console.log("3", i, j);
-    //     path.push(selectedArray[i][j + 1]);
-    //     (r = i), (c = j + 1);
-    //   }
-    //   //startingRow > endingRow
-    //   else if (i - 1 > endingRow && j - 1 > endingColumn) {
-    //     console.log("4", i, j);
-    //     path.push(selectedArray[i - 1][j - 1]);
-    //     (r = i - 1), (c = j - 1);
-    //   } else if (i - 1 > endingRow && j === endingColumn) {
-    //     console.log("5", i, j);
-    //     path.push(selectedArray[i - 1][j]);
-    //     (r = i - 1), (c = j);
-    //   } else if (i === endingRow && j - 1 > endingColumn) {
-    //     console.log("6", i, j);
-    //     path.push(selectedArray[i][j - 1]);
-    //     (r = i), (c = j - 1);
-    //   }
-    //   //endingRow
-    //   else if (i === endingRow && j === endingColumn) {
-    //     console.log("7", i, j);
-    //     (r = i), (c = j);
-    //     path.push(selectedArray[i][j]);
-    //     (r = i), (c = j);
-    //   }
-    // }
-    while (r != endingRow || c != endingColumn) {
-      // right diagonal(top to bottom)
-      if (r < endingRow && c < endingColumn) {
-        r = r + 1;
-        c = c + 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // left diagonal(bottom to top)
-      else if (r > endingRow && c > endingColumn) {
-        r = r - 1;
-        c = c - 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // top to bottom
-      else if (r < endingRow && c === endingColumn) {
-        r = r + 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // bottom to top
-      else if (r > endingRow && c === endingColumn) {
-        r = r - 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // left to right
-      else if (r === endingRow && c < endingColumn) {
-        c = c + 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // right to left
-      else if (r === endingRow && c > endingColumn) {
-        c = c - 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // r < endingRow && c > endingColumn
-      else if (r < endingRow && c > endingColumn) {
-        c = c - 1;
-        r = r + 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // r > endingRow && c < endingColumn
-      else if (r > endingRow && c < endingColumn) {
-        c = c + 1;
-        r = r - 1;
-        path.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
-      }
-      // //startingRow < endingRow
-      // if (startingRow < endingRow && startingColumn < endingColumn) {
-      //   const item = selectedArray[i + 1][j + 1];
-      //   console.log(item);
-      //   path.push(item);
-      // } else if (
-      //   startingRow < endingRow &&
-      //   startingColumn === endingColumn
-      // ) {
-      //   path.push(selectedArray[i + 1][j]);
-      // } else if (
-      //   startingRow === endingRow &&
-      //   startingColumn < endingColumn
-      // ) {
-      //   path.push(selectedArray[i][j + 1]);
-      // }
+  let path1: BoxItemType[] = [];
+  let path2: BoxItemType[] = [];
+  let path3: BoxItemType[] = [];
+  let path4: BoxItemType[] = [];
 
-      // //startingRow > endingRow
-      // else if (startingRow > endingRow && startingColumn > endingColumn) {
-      //   path.push(selectedArray[i - 1][j - 1]);
-      // } else if (
-      //   startingRow > endingRow &&
-      //   startingColumn === endingColumn
-      // ) {
-      //   path.push(selectedArray[i - 1][j]);
-      // } else if (
-      //   startingRow === endingRow &&
-      //   startingColumn > endingColumn
-      // ) {
-      //   path.push(selectedArray[i][j - 1]);
-      // }
+  for (let i = 0; i < 4; i++) {
+    
+    let r = selectedBox.i;
+    let c = selectedBox.j;
+
+    // main diagonal(selectedBox to top left)
+    if (i === 0) {
+      while (r - 1 >= 0 && c - 1 >= 0) {
+        r = r - 1;
+        c = c - 1;
+        path1.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+      }
     }
-    // To change the last box color to SELECTED_BOX_COLOR
-    if (r === endingRow && c === endingColumn) {
-      path[path.length - 1] = {
-        ...path[path.length - 1],
-        color: SELECTED_BOX_COLOR,
-      };
+    // antidiagonal (selectedBox to top right)
+    else if (i === 1) {
+      while (r - 1 >= 0 && c + 1 <= 7) {
+        r = r - 1;
+        c = c + 1;
+        path2.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+      }
     }
-    // });
-    // });
-    return path;
+    // main diagonal(selectedBox to bottom right)
+    else if (i === 2) {
+      while (r + 1 <= 7 && c + 1 <= 7) {
+        r = r + 1;
+        c = c + 1;
+        path3.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+      }
+    }
+    // antidiagonal(selectedBox to bottom left)
+    else if (i === 3) {
+      while (r + 1 <= 7 && c - 1 >= 0) {
+        r = r + 1;
+        c = c - 1;
+        path4.push({ ...selectedArray[r][c], color: PATH_BOX_COLOR });
+      }
+    }
   }
+  return [...path1, ...path2, ...path3, ...path4];
 };
