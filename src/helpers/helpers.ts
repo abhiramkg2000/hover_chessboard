@@ -26,7 +26,6 @@ export const findPath = (
   let path4: BoxItemType[] = [];
 
   for (let i = 0; i < 4; i++) {
-    
     let r = selectedBox.i;
     let c = selectedBox.j;
 
